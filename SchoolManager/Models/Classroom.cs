@@ -3,11 +3,19 @@ namespace SchoolManager.Models
 {
     public class Classroom
     {
-        public int Id { get; set; }
-        public string Name { get; set; }
-        public int Capacity { get; set; }
-        public Shift Shift { get; set; }
-        public ICollection<Student> Students { get; set; } = new List<Student>();
+            public int Id { get; set; }
+
+            public string Name { get; set; }
+
+            public int Capacity { get; set; }
+
+            public Shift Shift { get; set; }
+
+            public int TeacherId { get; set; }
+
+            public Teacher Teacher { get; set; }
+
+            public ICollection<Student> Students { get; set; } = new List<Student>();
 
         public Classroom() { }
 
@@ -29,7 +37,7 @@ namespace SchoolManager.Models
         }
         public string SearchStudent(string nome)
         {
-            return Students.Where(p => p.Nome == nome).Select(p => p.Nome).FirstOrDefault();
+            return Students.Where(p => p.Name == nome).Select(p => p.Name).FirstOrDefault();
         }
         
 
