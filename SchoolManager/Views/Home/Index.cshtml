@@ -2,7 +2,70 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="text-center mt-5">
+    <h1 class="display-4 fw-bold">School Manager</h1>
+
+    <p class="lead mt-3">
+        Manage students, teachers and classrooms easily.
+    </p>
+</div>
+
+<div class="container mt-5">
+    <div class="row">
+
+        <div class="col-md-4">
+            <div class="card shadow-sm mb-4">
+                <div class="card-body text-center">
+                    <h3>Students</h3>
+
+                    <p>
+                        Manage student information and classroom assignments.
+                    </p>
+
+                    <a asp-controller="Students"
+                       asp-action="Index"
+                       class="btn btn-primary">
+                        Access
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card shadow-sm mb-4">
+                <div class="card-body text-center">
+                    <h3>Teachers</h3>
+
+                    <p>
+                        View and manage teachers and their classrooms.
+                    </p>
+
+                    <a asp-controller="Teachers"
+                       asp-action="Index"
+                       class="btn btn-success">
+                        Access
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card shadow-sm mb-4">
+                <div class="card-body text-center">
+                    <h3>Classrooms</h3>
+
+                    <p>
+                        Organize classrooms, schedules and students.
+                    </p>
+
+                    <a asp-controller="Classrooms"
+                       asp-action="Index"
+                       class="btn btn-warning">
+                        Access
+                    </a>
+                </div>
+            </div>
+        </div>
+
+    </div>
 </div>
