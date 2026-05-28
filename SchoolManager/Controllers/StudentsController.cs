@@ -3,6 +3,9 @@ using SchoolManager.Services;
 using SchoolManager.Models;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using SchoolManager.Models.ViewModel;
+using System.Data;
+using SchoolManager.Services.Exceptions;
+using System.Diagnostics;
 
 namespace SchoolManager.Controllers
 {
@@ -39,12 +42,12 @@ namespace SchoolManager.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return RedirectToAction(nameof(Error), new { message = "Id not provided" });
             }
             var obj = _studentsService.FindById(id.Value);
             if (obj == null)
             {
-                return NotFound();
+                return RedirectToAction(nameof(Error), new { message = "Id not found" });
             }
 
             return View(obj);
@@ -62,15 +65,64 @@ namespace SchoolManager.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return RedirectToAction(nameof(Error), new { message = "Id not provided" });
             }
             var obj = _studentsService.FindById(id.Value);
             if (obj == null)
             {
-                return NotFound();
+                return RedirectToAction(nameof(Error), new { message = "Id not found" });
             }
 
             return View(obj);
+        }
+        public IActionResult Edit(int? id)
+        {
+            if (id == null)
+            {
+                return RedirectToAction(nameof(Error), new { message = "Id not provided" });
+            }
+            var obj = _studentsService.FindById(id.Value);
+            if (obj == null)
+            {
+                return RedirectToAction(nameof(Error), new { message = "Id not found" });
+            }
+
+            List<Classroom> classes = _classroomService.FindAll();
+            StudentFormViewModel viewModel = new StudentFormViewModel() { Student = obj, Classrooms = classes };
+            return View(viewModel);
+
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Edit(int id, Student student)
+        {
+            if (id != student.Id)
+            {
+                return RedirectToAction(nameof(Error), new { message = "Id mismatch" });
+            }
+            try
+            {
+                _studentsService.Update(student);
+                return RedirectToAction(nameof(Index));
+            }
+            catch (ApplicationException e)
+            {
+                return RedirectToAction(nameof(Error), new { message = e.Message });
+            }
+            
+            
+        }
+
+        public IActionResult Error(string message)
+        {
+            var viewModel = new ErrorViewModel
+            {
+                Message = message,
+                RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier
+
+            };
+            return View(viewModel);
         }
 
     }

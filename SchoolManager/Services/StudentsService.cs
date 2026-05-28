@@ -1,6 +1,6 @@
 ﻿using SchoolManager.Models;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Conventions;
+using SchoolManager.Services.Exceptions;
 
 namespace SchoolManager.Services
 {
@@ -31,6 +31,22 @@ namespace SchoolManager.Services
             var obj = _context.Students.Find(id);
             _context.Students.Remove(obj);
             _context.SaveChanges();
+        }
+        public void Update(Student obj)
+        {
+            if (!_context.Students.Any(x => x.Id == obj.Id))
+            {
+                throw new NotFoundException("Id not found");
+            }
+            try
+            {
+                _context.Update(obj);
+                _context.SaveChanges();
+            }
+            catch(DbUpdateConcurrencyException e)
+            {
+                throw new DbConcurrencyException(e.Message);
+            }
         }
 
     }
