@@ -2,14 +2,21 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SchoolManager.Models;
+using SchoolManager.Models.ViewModel;
+using SchoolManager.Services;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 public class ClassroomsController : Controller
 {
     private readonly SchoolManagerContext _context;
+    private readonly TeacherService _teacherService;
+    private readonly ClassroomService _classroomService;
 
-    public ClassroomsController(SchoolManagerContext context)
+    public ClassroomsController(SchoolManagerContext context, TeacherService teacherService, ClassroomService classroomService)
     {
         _context = context;
+        _teacherService = teacherService;
+        _classroomService = classroomService;
     }
 
     // GET: CLASSROOMS
@@ -39,39 +46,35 @@ public class ClassroomsController : Controller
     // GET: CLASSROOMS/Create
     public IActionResult Create()
     {
-        return View();
+        var teachers = _teacherService.FindAll();
+        var viewModel = new ClassroomFormViewModel { Teachers = teachers };
+        return View(viewModel);
     }
 
-    // POST: CLASSROOMS/Create
-    // To protect from overposting attacks, enable the specific properties you want to bind to.
-    // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Create([Bind("Id,Name,Capacity,Shift")] Classroom classroom)
+    public IActionResult Create(Classroom classroom)
     {
-        if (ModelState.IsValid)
-        {
-            _context.Add(classroom);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
-        return View(classroom);
+            _classroomService.Insert(classroom);
+        return RedirectToAction(nameof(Index));
     }
 
     // GET: CLASSROOMS/Edit/5
-    public async Task<IActionResult> Edit(int? id)
+    public IActionResult Edit(int? id)
     {
         if (id == null)
         {
-            return NotFound();
+            return RedirectToAction(nameof(Error), new { message = "Id not provided" });
+        }
+        var obj = _classroomService.FindById(id.Value);
+        if (obj == null)
+        {
+            return RedirectToAction(nameof(Error), new { message = "Id not found" });
         }
 
-        var classroom = await _context.Classrooms.FindAsync(id);
-        if (classroom == null)
-        {
-            return NotFound();
-        }
-        return View(classroom);
+        List<Teacher> classes = _teacherService.FindAll();
+        ClassroomFormViewModel viewModel = new ClassroomFormViewModel() {Classroom = obj, Teachers = classes};
+        return View(viewModel);
     }
 
     // POST: CLASSROOMS/Edit/5
@@ -79,34 +82,21 @@ public class ClassroomsController : Controller
     // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Edit(int? id, [Bind("Id,Name,Capacity,Shift")] Classroom classroom)
+    public async Task<IActionResult> Edit(int? id, [Bind("Id,Name,Capacity,Shift,TeacherId")] Classroom classroom)
     {
         if (id != classroom.Id)
         {
-            return NotFound();
+            return RedirectToAction(nameof(Error), new { message = "Id mismatch" });
         }
-
-        if (ModelState.IsValid)
+        try
         {
-            try
-            {
-                _context.Update(classroom);
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!ClassroomExists(classroom.Id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+            _classroomService.Update(classroom);
             return RedirectToAction(nameof(Index));
         }
-        return View(classroom);
+        catch (ApplicationException e)
+        {
+            return RedirectToAction(nameof(Error), new { message = e.Message });
+        }
     }
 
     // GET: CLASSROOMS/Delete/5

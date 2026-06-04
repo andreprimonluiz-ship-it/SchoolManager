@@ -1,42 +1,36 @@
-@model SchoolManager.Models.Classroom
-
+@model SchoolManager.Models.ViewModel.ClassroomFormViewModel
 @{
     ViewData["Title"] = "Create";
 }
 
-<h1>Create</h1>
+<h2>@ViewData["Title"]</h2>
 
 <h4>Classroom</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-
             <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="Capacity" class="control-label"></label>
-                <input asp-for="Capacity" class="form-control" />
-                <span asp-validation-for="Capacity" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="Shift" class="control-label"></label>
-                <input asp-for="Shift" class="form-control" />
-                <span asp-validation-for="Shift" class="text-danger"></span>
+                <label asp-for="Classroom.Name" class="control-label"></label>
+                <input asp-for="Classroom.Name" class="form-control" />
             </div>
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <label asp-for="Classroom.Capacity" class="control-label"></label>
+                <input asp-for="Classroom.Capacity" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label asp-for="Classroom.Teacher" class="control-label"></label>
+                <select asp-for="Classroom.TeacherId" asp-items="@(new SelectList(Model.Teachers, "Id","Name"))" class="form-control"></select>
+            </div>
+            <div class="form-group"> <label asp-for="Classroom.Shift" class="control-label"></label> 
+                <select asp-for="Classroom.Shift" asp-items="Html.GetEnumSelectList<SchoolManager.Models.Enums.Shift>()" class="form-control"></select>
+
+            </div>
+
+
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-default" />
             </div>
         </form>
     </div>
-</div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
 </div>

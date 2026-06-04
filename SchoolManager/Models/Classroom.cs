@@ -27,15 +27,6 @@ namespace SchoolManager.Models
             Capacity = capacity;
             Shift = shift;
         }
-
-        public void AddStudent(Student student)
-        {
-            Students.Add(student);
-        }
-        public void RemoveStudent(Student student)
-        {
-            Students.Remove(student);
-        }
         public string SearchStudent(string nome)
         {
             return Students.Where(p => p.Name == nome).Select(p => p.Name).FirstOrDefault();
