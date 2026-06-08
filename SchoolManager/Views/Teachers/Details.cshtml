@@ -1,29 +1,33 @@
-﻿@model SchoolManager.Models.ViewModel.TeacherFormViewModel
+﻿@model SchoolManager.Models.Teacher
 
 @{
     ViewData["Title"] = "Details";
 }
-<h2> @ViewData["Title"]</h2>
+
+<h2>@ViewData["Title"]</h2>
 
 <div>
     <h4>Teacher</h4>
     <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.Teacher.Name)
+
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Name)
         </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Teacher.Name)
+        <dd class="col-sm-10">
+            @Model.Name
         </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Classrooms)
+
+        <dt class="col-sm-2">
+            Classrooms
         </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Classrooms)
+        <dd class="col-sm-10">
+            @string.Join(", ", Model.Classrooms.Select(c => c.Name))
         </dd>
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">Edit</a>
-    <a asp-action="Index">Back to List</a>
+    </dl>
 </div>
 
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">Edit</a>
+    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+</div>

@@ -24,7 +24,7 @@ namespace SchoolManager.Services
         }
         public Teacher FindById(int id)
         {
-            return _context.Teachers.FirstOrDefault(p => p.Id == id);
+            return _context.Teachers.Include(p => p.Classrooms).FirstOrDefault(obj => obj.Id == id);
         }
         public void Remove(int id)
         {

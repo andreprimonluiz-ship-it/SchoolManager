@@ -1,38 +1,59 @@
 @model SchoolManager.Models.Classroom
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Classroom Details";
 }
 
-<h1>Details</h1>
+<h2 class="mb-4">@ViewData["Title"]</h2>
 
-<div>
-    <h4>Classroom</h4>
-    <hr />
-    <dl>
-        <dt>
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-    </dl>
-        <dt>
-            @Html.DisplayNameFor(model => model.Capacity)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Capacity)
-        </dd>
-    </dl>
-        <dt>
-            @Html.DisplayNameFor(model => model.Shift)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Shift)
-        </dd>
-    </dl>
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+<div class="card shadow-sm">
+
+    <div class="card-header">
+        <h4 class="mb-0">Classroom Information</h4>
+    </div>
+
+    <div class="card-body">
+
+        <dl class="row">
+
+            <dt class="col-sm-3">
+                @Html.DisplayNameFor(model => model.Name)
+            </dt>
+            <dd class="col-sm-9">
+                @Model.Name
+            </dd>
+
+            <dt class="col-sm-3">
+                @Html.DisplayNameFor(model => model.Capacity)
+            </dt>
+            <dd class="col-sm-9">
+                @Model.Capacity
+            </dd>
+
+            <dt class="col-sm-3">
+                @Html.DisplayNameFor(model => model.Shift)
+            </dt>
+            <dd class="col-sm-9">
+                @Model.Shift
+            </dd>
+
+        </dl>
+
+    </div>
+
+    <div class="card-footer">
+        <div class="d-flex gap-2">
+            <a asp-action="Edit"
+               asp-route-id="@Model.Id"
+               class="btn btn-primary">
+                Edit
+            </a>
+
+            <a asp-action="Index"
+               class="btn btn-secondary">
+                Back
+            </a>
+        </div>
+    </div>
+
 </div>

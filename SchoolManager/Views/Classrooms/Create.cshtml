@@ -1,36 +1,64 @@
 @model SchoolManager.Models.ViewModel.ClassroomFormViewModel
+
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Create Classroom";
 }
 
-<h2>@ViewData["Title"]</h2>
+<h2 class="mb-4">@ViewData["Title"]</h2>
 
-<h4>Classroom</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
+<div class="card shadow-sm">
+    <div class="card-header">
+        <h4 class="mb-0">Classroom Information</h4>
+    </div>
+
+    <div class="card-body">
         <form asp-action="Create">
-            <div class="form-group">
-                <label asp-for="Classroom.Name" class="control-label"></label>
+
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+            <div class="mb-3">
+                <label asp-for="Classroom.Name" class="form-label"></label>
                 <input asp-for="Classroom.Name" class="form-control" />
+                <span asp-validation-for="Classroom.Name" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="Classroom.Capacity" class="control-label"></label>
+
+            <div class="mb-3">
+                <label asp-for="Classroom.Capacity" class="form-label"></label>
                 <input asp-for="Classroom.Capacity" class="form-control" />
-            </div>
-            <div class="form-group">
-                <label asp-for="Classroom.Teacher" class="control-label"></label>
-                <select asp-for="Classroom.TeacherId" asp-items="@(new SelectList(Model.Teachers, "Id","Name"))" class="form-control"></select>
-            </div>
-            <div class="form-group"> <label asp-for="Classroom.Shift" class="control-label"></label> 
-                <select asp-for="Classroom.Shift" asp-items="Html.GetEnumSelectList<SchoolManager.Models.Enums.Shift>()" class="form-control"></select>
-
+                <span asp-validation-for="Classroom.Capacity" class="text-danger"></span>
             </div>
 
-
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-default" />
+            <div class="mb-3">
+                <label asp-for="Classroom.TeacherId" class="form-label">
+                    Teacher
+                </label>
+                <select asp-for="Classroom.TeacherId"
+                        asp-items="@(new SelectList(Model.Teachers, "Id", "Name"))"
+                        class="form-select">
+                    <option value="">Select a Teacher</option>
+                </select>
+                <span asp-validation-for="Classroom.TeacherId" class="text-danger"></span>
             </div>
+
+            <div class="mb-4">
+                <label asp-for="Classroom.Shift" class="form-label"></label>
+                <select asp-for="Classroom.Shift"
+                        asp-items="Html.GetEnumSelectList<SchoolManager.Models.Enums.Shift>()"
+                        class="form-select">
+                </select>
+                <span asp-validation-for="Classroom.Shift" class="text-danger"></span>
+            </div>
+
+            <div class="d-flex gap-2">
+                <button type="submit" class="btn btn-primary">
+                    Create
+                </button>
+
+                <a asp-action="Index" class="btn btn-secondary">
+                    Back
+                </a>
+            </div>
+
         </form>
     </div>
 </div>
