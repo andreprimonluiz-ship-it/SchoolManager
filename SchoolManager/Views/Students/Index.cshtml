@@ -1,47 +1,87 @@
 ﻿@model IEnumerable<SchoolManager.Models.Student>
+
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Students";
 }
 
-<h2>Students</h2>
-<p>
-    <a asp-action="Create" class="btn btn-dark">Create New</a>
-</p>
-<table class="table table-striped table-hover">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Name)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Classroom)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Classroom.Shift)
-            </th>
-            <th></th>
-        </tr>
-       </thead> 
-       <tbody>
-        @foreach(var item in Model)
-        {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Name)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Classroom.Name)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Classroom.Shift)
-                </td>
-                <td>
-                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a>
-                    <a asp-action="Details" asp-route-id="@item.Id">Details</a>
-                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+<h2 class="mb-4">@ViewData["Title"]</h2>
 
-                </td>
-                
-            </tr>
-        }
-    </tbody>
+<div class="card shadow-sm">
+
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h4 class="mb-0">Student List</h4>
+
+        <a asp-action="Create" class="btn btn-success">
+            Create Student
+        </a>
+    </div>
+
+    <div class="card-body">
+
+        <div class="table-responsive">
+
+            <table class="table table-striped table-hover align-middle">
+
+                <thead class="table-dark">
+                    <tr>
+                        <th>@Html.DisplayNameFor(model => model.Name)</th>
+                        <th>@Html.DisplayNameFor(model => model.Classroom.Name)</th>
+                        <th>@Html.DisplayNameFor(model => model.Classroom.Shift)</th>
+                        <th class="text-center">Actions</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+
+                            <td>
+                                @item.Name
+                            </td>
+
+                            <td>
+                                @item.Classroom.Name
+                            </td>
+
+                            <td>
+                                <span class="badge bg-secondary">
+                                    @item.Classroom.Shift
+                                </span>
+                            </td>
+
+                            <td class="text-center">
+
+                                <a asp-action="Edit"
+                                   asp-route-id="@item.Id"
+                                   class="btn btn-sm btn-primary">
+                                    Edit
+                                </a>
+
+                                <a asp-action="Details"
+                                   asp-route-id="@item.Id"
+                                   class="btn btn-sm btn-secondary">
+                                    Details
+                                </a>
+
+                                <a asp-action="Delete"
+                                   asp-route-id="@item.Id"
+                                   class="btn btn-sm btn-danger">
+                                    Delete
+                                </a>
+
+                            </td>
+
+                        </tr>
+                    }
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
