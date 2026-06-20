@@ -15,7 +15,7 @@ namespace SchoolManager.Services
 
         public List<Student> FindAll()
         {
-            return _context.Students.Include(p => p.Classroom).ToList();
+            return _context.Students.Include(p => p.Classroom).OrderBy(x => x.Classroom.Shift).ToList();
         }
         public void Insert(Student obj)
         {

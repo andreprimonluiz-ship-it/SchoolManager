@@ -1,6 +1,8 @@
 ﻿@model SchoolManager.Models.Student
 
 @{
+    @using SchoolManager.Models.Enums
+
     ViewData["Title"] = "Student Details";
 }
 <h2> @ViewData["Title"]</h2>
@@ -11,28 +13,48 @@
         <h4 class="mb-0">Students Information</h4>
     </div>
     <div class="card-body">
-        <dl class="row">
+        <dl class="row mb-3">
             <dt class="col-sm-3">
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
+                @Html.DisplayNameFor(model => model.Name)
+            </dt>
             <dd class="col-sm-9">
-            @Html.DisplayFor(model => model.Name)
-        </dd>
+                @Html.DisplayFor(model => model.Name)
+            </dd>
             <dt class="col-sm-3">
-            @Html.DisplayNameFor(model => model.Classroom.Name)
-        </dt>
+                @Html.DisplayNameFor(model => model.Email)
+            </dt>
             <dd class="col-sm-9">
-            @Html.DisplayFor(model => model.Classroom.Name)
-        </dd>
+                @Html.DisplayFor(model => model.Email)
+            </dd>
             <dt class="col-sm-3">
-            @Html.DisplayNameFor(model => model.Classroom.Shift)
-        </dt>
+                @Html.DisplayNameFor(model => model.Phone)
+            </dt>
             <dd class="col-sm-9">
-            @Html.DisplayFor(model => model.Classroom.Shift)
-        </dd>
-    </dl>
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">Edit</a>
-    <a asp-action="Index">Back to List</a>
-</div>
+                @Html.DisplayFor(model => model.Phone)
+            </dd>
+            <dt class="col-sm-3">
+                @Html.DisplayNameFor(model => model.BirthDate)
+            </dt>
+            <dd class="col-sm-9">
+                @Html.DisplayFor(model => model.BirthDate)
+            </dd>
+            <dt class="col-sm-3">
+                @Html.DisplayNameFor(model => model.Classroom.Name)
+            </dt>
+            <dd class="col-sm-9">
+                @Html.DisplayFor(model => model.Classroom.Name)
+            </dd>
+            <dt class="col-sm-3">
+                @Html.DisplayNameFor(model => model.Classroom.Shift)
+            </dt>
+            <dd class ="col-sm-9">
+            <span class="badge @Model.Classroom.Shift.GetBadgeClass()">
+                @Model.Classroom.Shift
+            </span>
+            </dd>
+        </dl>
+    </div>
+    <div>
+        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">Edit</a>
+        <a asp-action="Index">Back to List</a>
+    </div>

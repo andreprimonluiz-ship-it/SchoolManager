@@ -1,6 +1,7 @@
 @model IEnumerable<SchoolManager.Models.Classroom>
 
 @{
+    @using SchoolManager.Models.Enums
     ViewData["Title"] = "Classrooms";
 }
 
@@ -46,7 +47,7 @@
                             </td>
 
                             <td>
-                                <span class="badge bg-secondary">
+                                <span class="badge @item.Shift.GetBadgeClass()">
                                     @item.Shift
                                 </span>
                             </td>

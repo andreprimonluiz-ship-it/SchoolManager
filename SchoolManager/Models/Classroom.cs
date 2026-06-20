@@ -1,4 +1,4 @@
-﻿using SchoolManager.Controllers;
+﻿
 using SchoolManager.Models.Enums;
 namespace SchoolManager.Models
 {
@@ -27,11 +27,7 @@ namespace SchoolManager.Models
             Capacity = capacity;
             Shift = shift;
         }
-        public string SearchStudent(string nome)
-        {
-            return Students.Where(p => p.Name == nome).Select(p => p.Name).FirstOrDefault();
-        }
-        
+      
         
         
 

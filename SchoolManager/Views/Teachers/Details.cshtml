@@ -1,7 +1,8 @@
 ﻿@model SchoolManager.Models.Teacher
 
 @{
-    ViewData["Title"] = "Teacher Details";
+    @using SchoolManager.Models.Enums
+        ViewData["Title"] = "Teacher Details";
 }
 
 <h2>@ViewData["Title"]</h2>
@@ -14,23 +15,40 @@
 
     <div class="card-body">
 
-    <dl class="row">
+        <dl class="row">
 
-        <dt class="col-sm-3">
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-        <dd class="col-sm-9">
-            @Model.Name
-        </dd>
+            <dt class="col-sm-3">
+                @Html.DisplayNameFor(model => model.Name)
+            </dt>
+            <dd class="col-sm-9">
+                @Model.Name
+            </dd>
+            <dt class="col-sm-3">
+                @Html.DisplayNameFor(model => model.Email)
+            </dt>
+            <dd class="col-sm-9">
+                @Model.Email
+            </dd>
+            <dt class="col-sm-3">
+                @Html.DisplayNameFor(model => model.Phone)
+            </dt>
+            <dd class="col-sm-9">
+                @Model.Phone
+            </dd>
+            <dt class="col-sm-3">
+                Classrooms
+            </dt>
+            <dd class="col-sm-9 d-flex flex-wrap gap-1">
+                @foreach (var item in Model.Classrooms)
+                {
+                    <span class="badge @item.Shift.GetBadgeClass()">
+                        @item.Name
+                    </span>
+                }
+            </dd>
 
-        <dt class="col-sm-3">
-            Classrooms
-        </dt>
-        <dd class="col-sm-9">
-            @string.Join(", ", Model.Classrooms.Select(c => c.Name))
-        </dd>
-    </dl>
-</div>
+        </dl>
+    </div>
     <div class="card-footer">
         <div class="d-flex gap-2">
             <a asp-action="Edit"

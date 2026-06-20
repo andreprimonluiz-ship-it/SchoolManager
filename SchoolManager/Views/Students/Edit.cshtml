@@ -19,8 +19,20 @@
                 <input asp-for="Student.Name" class="form-control" />
             </div>
             <div class="mb-3">
+                <label asp-for="Student.Email" class="control-label"></label>
+                <input asp-for="Student.Email" class="form-control" />
+            </div>
+            <div class="mb-3">
+                <label asp-for="Student.Phone" class="control-label"></label>
+                <input asp-for="Student.Phone" class="form-control" />
+            </div>
+            <div class="mb-3">
+                <label asp-for="Student.BirthDate" class="control-label"></label>
+                <input asp-for="Student.BirthDate" class="form-control" />
+            </div>
+            <div class="mb-3">
                 <label asp-for="Student.Classroom" class="control-label"></label>
-                <select asp-for="Student.ClassroomId" asp-items="@(new SelectList(Model.Classrooms, "Id","Name"))" class="form-control"></select>
+                <select asp-for="Student.ClassroomId" asp-items="@(new SelectList(Model.Classrooms, "Id", "Name"))" class="form-control"></select>
             </div>
             <div class="d-flex gap-2">
                 <button type="submit" class="btn btn-primary">

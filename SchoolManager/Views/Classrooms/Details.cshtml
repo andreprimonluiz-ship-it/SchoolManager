@@ -1,6 +1,7 @@
 @model SchoolManager.Models.Classroom
 
 @{
+    @using SchoolManager.Models.Enums
     ViewData["Title"] = "Classroom Details";
 }
 
@@ -33,8 +34,11 @@
             <dt class="col-sm-3">
                 @Html.DisplayNameFor(model => model.Shift)
             </dt>
+
             <dd class="col-sm-9">
-                @Model.Shift
+                <span class="badge @Model.Shift.GetBadgeClass()">
+                    @Model.Shift
+                </span>
             </dd>
 
         </dl>

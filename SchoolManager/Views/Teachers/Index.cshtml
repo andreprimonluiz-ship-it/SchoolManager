@@ -1,6 +1,7 @@
 ﻿@model IEnumerable<SchoolManager.Models.Teacher>
 
 @{
+    @using SchoolManager.Models.Enums
     ViewData["Title"] = "Teachers";
 }
 
@@ -54,9 +55,11 @@
                                 {
                                     @foreach (var classroom in item.Classrooms)
                                     {
-                                        <span class="badge bg-secondary me-1">
+
+                                        <span class="badge @classroom.Shift.GetBadgeClass()">
                                             @classroom.Name (@classroom.Shift)
                                         </span>
+
                                     }
                                 }
                                 else

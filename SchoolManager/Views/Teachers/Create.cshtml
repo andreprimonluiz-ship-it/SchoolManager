@@ -21,6 +21,16 @@
                 <input asp-for="Teacher.Name" class="form-control" />
                 <span asp-validation-for="Teacher.Name" class="text-danger"></span>
             </div>
+            <div class="mb-3">
+                <label asp-for="Teacher.Email" class="form-label"></label>
+                <input asp-for="Teacher.Email" class="form-control" />
+                <span asp-validation-for="Teacher.Email" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="Teacher.Phone" class="form-label"></label>
+                <input asp-for="Teacher.Phone" class="form-control" />
+                <span asp-validation-for="Teacher.Phone" class="text-danger"></span>
+            </div>
 
             <div class="d-flex gap-2">
                 <button type="submit" class="btn btn-primary">
@@ -31,8 +41,8 @@
                     Back
                 </a>
             </div>
-            </form>
-        </div>
+        </form>
     </div>
+</div>
 
 
