@@ -13,7 +13,7 @@ namespace SchoolManager.Controllers
     {
         private readonly StudentsService _studentsService;
         private readonly ClassroomService _classroomService;
-        public StudentsController (StudentsService studentsService, ClassroomService classroomService)
+        public StudentsController(StudentsService studentsService, ClassroomService classroomService)
         {
             _studentsService = studentsService;
             _classroomService = classroomService;
@@ -31,10 +31,17 @@ namespace SchoolManager.Controllers
             var viewModel = new StudentFormViewModel { Classrooms = classrooms };
             return View(viewModel);
         }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Create(Student student)
         {
+            if (!ModelState.IsValid)
+            {
+                var classes = _classroomService.FindAll();
+                var viewModel = new StudentFormViewModel { Student = student, Classrooms = classes };
+                return View(viewModel);
+            }
             _studentsService.Insert(student);
             return RedirectToAction(nameof(Index));
         }
@@ -97,6 +104,13 @@ namespace SchoolManager.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Edit(int id, Student student)
         {
+            if (!ModelState.IsValid)
+            {
+                var classes = _classroomService.FindAll();
+                var viewModel = new StudentFormViewModel { Student = student, Classrooms = classes };
+                return View(viewModel);
+            }
+
             if (id != student.Id)
             {
                 return RedirectToAction(nameof(Error), new { message = "Id mismatch" });
@@ -110,8 +124,8 @@ namespace SchoolManager.Controllers
             {
                 return RedirectToAction(nameof(Error), new { message = e.Message });
             }
-            
-            
+
+
         }
 
         public IActionResult Error(string message)
