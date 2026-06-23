@@ -26,7 +26,7 @@ namespace SchoolManager.Models
         public DateTime BirthDate { get; set; }
         public int ClassroomId { get; set; }
 
-        public Classroom Classroom { get; set; }
+        public Classroom? Classroom { get; set; }
 
         public Student()
         {

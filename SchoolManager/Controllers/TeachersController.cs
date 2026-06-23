@@ -6,80 +6,45 @@ using System.Diagnostics;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 namespace SchoolManager.Controllers
 {
-    public class TeachersController: Controller
+    public class TeachersController : Controller
     {
         private readonly TeacherService _teacherService;
         private readonly ClassroomService _classroomService;
 
-        public TeachersController (TeacherService teacherService, ClassroomService classroomService)
+        public TeachersController(TeacherService teacherService, ClassroomService classroomService)
         {
             _teacherService = teacherService;
             _classroomService = classroomService;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var list = _teacherService.FindAll();
+            var list = await _teacherService.FindAllAsync();
             return View(list);
         }
 
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            var classrooms = _classroomService.FindAll();
-            var viewModel = new TeacherFormViewModel { Classrooms = classrooms};
+            var classrooms = await _classroomService.FindAllAsync();
+            var viewModel = new TeacherFormViewModel { Classrooms = classrooms };
             return View(viewModel);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(Teacher teacher)
+        public async Task<IActionResult> Create(Teacher teacher)
         {
-            _teacherService.Insert(teacher);
+            await _teacherService.InsertAsync(teacher);
             return RedirectToAction(nameof(Index));
         }
 
-        public IActionResult Delete(int? id)
-        {
-            if (id == null) {
-                return RedirectToAction(nameof(Error), new { message = "Id not provided" });
-            }
-            var obj = _teacherService.FindById(id.Value);
-            if (obj == null)
-            {
-                return RedirectToAction(nameof(Error), new { message = "Id not found" });
-            }
-                return View(obj);
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult Delete(int id)
-        {
-            _teacherService.Remove(id);
-            return RedirectToAction(nameof(Index));
-        }
-        public IActionResult Details(int? id)
+        public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
             {
                 return RedirectToAction(nameof(Error), new { message = "Id not provided" });
             }
-            var obj = _teacherService.FindById(id.Value);
-            if (obj == null)
-            {
-                return RedirectToAction(nameof(Error), new { message = "Id not found" });
-            }
-
-            return View(obj);
-        }
-
-        public IActionResult Edit(int? id)
-        {
-            if (id == null)
-            {
-                return RedirectToAction(nameof(Error), new { message = "Id not provided" });
-            }
-            var obj = _teacherService.FindById(id.Value);
+            var obj = await _teacherService.FindByIdAsync(id.Value);
             if (obj == null)
             {
                 return RedirectToAction(nameof(Error), new { message = "Id not found" });
@@ -89,10 +54,46 @@ namespace SchoolManager.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(Teacher teacher)
+        public async Task<IActionResult> Delete(int id)
         {
-            _teacherService.Update(teacher);
-           return RedirectToAction(nameof(Index));
+            await _teacherService.RemoveAsync(id);
+            return RedirectToAction(nameof(Index));
+        }
+        public async Task<IActionResult> Details(int? id)
+        {
+            if (id == null)
+            {
+                return RedirectToAction(nameof(Error), new { message = "Id not provided" });
+            }
+            var obj = await _teacherService.FindByIdAsync(id.Value);
+            if (obj == null)
+            {
+                return RedirectToAction(nameof(Error), new { message = "Id not found" });
+            }
+
+            return View(obj);
+        }
+
+        public async Task<IActionResult> Edit(int? id)
+        {
+            if (id == null)
+            {
+                return RedirectToAction(nameof(Error), new { message = "Id not provided" });
+            }
+            var obj = await _teacherService.FindByIdAsync(id.Value);
+            if (obj == null)
+            {
+                return RedirectToAction(nameof(Error), new { message = "Id not found" });
+            }
+            return View(obj);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(Teacher teacher)
+        {
+            await _teacherService.UpdateAsync(teacher);
+            return RedirectToAction(nameof(Index));
         }
 
         public IActionResult Error(string message)
@@ -107,7 +108,7 @@ namespace SchoolManager.Controllers
         }
 
 
-        
+
 
     }
 }

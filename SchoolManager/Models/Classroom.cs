@@ -19,9 +19,7 @@ namespace SchoolManager.Models
 
         [Display(Name = "Teacher")]
         public int TeacherId { get; set; }
-
-        [Required(ErrorMessage = "{0} required")]
-        public Teacher Teacher { get; set; }
+        public Teacher? Teacher { get; set; }
 
         public ICollection<Student> Students { get; set; } = new List<Student>();
 

@@ -13,35 +13,36 @@ namespace SchoolManager.Services
             _context = context;
         }
 
-        public List<Student> FindAll()
+        public async Task<List<Student>> FindAllAsync()
         {
-            return _context.Students.Include(p => p.Classroom).OrderBy(x => x.Classroom.Shift).ToList();
+            return await _context.Students.Include(p => p.Classroom).OrderBy(x => x.Classroom.Shift).ToListAsync();
         }
-        public void Insert(Student obj)
+        public async Task InsertAsync(Student obj)
         {
             _context.Add(obj);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
-        public Student FindById(int id)
+        public async Task<Student> FindByIdAsync(int id)
         {
-            return _context.Students.Include(p => p.Classroom).FirstOrDefault(obj => obj.Id == id);
+            return await _context.Students.Include(p => p.Classroom).FirstOrDefaultAsync(obj => obj.Id == id);
         }
-        public void Remove(int id)
+        public async Task RemoveAsync(int id)
         {
-            var obj = _context.Students.Find(id);
+            var obj = await _context.Students.FindAsync(id);
             _context.Students.Remove(obj);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
-        public void Update(Student obj)
+        public async Task UpdateAsync(Student obj)
         {
-            if (!_context.Students.Any(x => x.Id == obj.Id))
+            bool hasAny = await _context.Students.AnyAsync(x => x.Id == obj.Id);
+            if (!hasAny)
             {
                 throw new NotFoundException("Id not found");
             }
             try
             {
                 _context.Update(obj);
-                _context.SaveChanges();
+                await _context.SaveChangesAsync();
             }
             catch(DbUpdateConcurrencyException e)
             {
