@@ -17,18 +17,22 @@
             <div class="mb-3">
                 <label asp-for="Student.Name" class="control-label"></label>
                 <input asp-for="Student.Name" class="form-control" />
+                <span asp-validation-for="Student.Name" class="text-danger"></span>
             </div>
             <div class="mb-3">
                 <label asp-for="Student.Email" class="control-label"></label>
                 <input asp-for="Student.Email" class="form-control" />
+                <span asp-validation-for="Student.Email" class="text-danger"></span>
             </div>
             <div class="mb-3">
                 <label asp-for="Student.Phone" class="control-label"></label>
                 <input asp-for="Student.Phone" class="form-control" />
+                <span asp-validation-for="Student.Phone" class="text-danger"></span>
             </div>
             <div class="mb-3">
                 <label asp-for="Student.BirthDate" class="control-label"></label>
                 <input asp-for="Student.BirthDate" class="form-control" />
+                <span asp-validation-for="Student.BirthDate" class="text-danger"></span>
             </div>
             <div class="mb-3">
                 <label asp-for="Student.Classroom" class="control-label"></label>
@@ -46,3 +50,8 @@
         </form>
     </div>
 </div>
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

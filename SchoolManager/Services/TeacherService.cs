@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Identity.Client;
 using SchoolManager.Models;
 using SchoolManager.Services.Exceptions;
 
@@ -13,35 +14,36 @@ namespace SchoolManager.Services
             _context = context;
         }
 
-        public List<Teacher> FindAll()
+        public async Task<List<Teacher>> FindAllAsync()
         {
-            return _context.Teachers.Include(p => p.Classrooms).OrderBy(x => x.Name).ToList();
+            return await _context.Teachers.Include(p => p.Classrooms).OrderBy(x => x.Name).ToListAsync();
         }
-        public void Insert(Teacher obj)
+        public async Task InsertAsync(Teacher obj)
         {
             _context.Teachers.Add(obj);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
-        public Teacher FindById(int id)
+        public async Task<Teacher> FindByIdAsync(int id)
         {
-            return _context.Teachers.Include(p => p.Classrooms).FirstOrDefault(obj => obj.Id == id);
+            return await _context.Teachers.Include(p => p.Classrooms).FirstOrDefaultAsync(obj => obj.Id == id);
         }
-        public void Remove(int id)
+        public async Task RemoveAsync(int id)
         {
-            var obj = _context.Teachers.Find(id);
+            var obj = await _context.Teachers.FindAsync(id);
             _context.Teachers.Remove(obj);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
-        public void Update(Teacher obj)
+        public async Task UpdateAsync(Teacher obj)
         {
-            if (!_context.Teachers.Any(x => x.Id == obj.Id))
+            bool hasAny = await _context.Teachers.AnyAsync(x => x.Id == obj.Id);
+            if (!hasAny)
             {
                 throw new NotFoundException("Id not found");
             }
             try
             {
                 _context.Update(obj);
-                _context.SaveChanges();
+                await _context.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException e)
             {

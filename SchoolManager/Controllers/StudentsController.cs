@@ -13,38 +13,45 @@ namespace SchoolManager.Controllers
     {
         private readonly StudentsService _studentsService;
         private readonly ClassroomService _classroomService;
-        public StudentsController (StudentsService studentsService, ClassroomService classroomService)
+        public StudentsController(StudentsService studentsService, ClassroomService classroomService)
         {
             _studentsService = studentsService;
             _classroomService = classroomService;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var list = _studentsService.FindAll();
+            var list = await _studentsService.FindAllAsync();
             return View(list);
         }
 
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            var classrooms = _classroomService.FindAll();
+            var classrooms = await _classroomService.FindAllAsync();
             var viewModel = new StudentFormViewModel { Classrooms = classrooms };
             return View(viewModel);
         }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(Student student)
+        public async Task<IActionResult> Create(Student student)
         {
-            _studentsService.Insert(student);
+            if (!ModelState.IsValid)
+            {
+                var classes = await _classroomService.FindAllAsync();
+                var viewModel = new StudentFormViewModel { Student = student, Classrooms = classes };
+                return View(viewModel);
+            }
+            await _studentsService.InsertAsync(student);
             return RedirectToAction(nameof(Index));
         }
-        public IActionResult Delete(int? id)
+        public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
             {
                 return RedirectToAction(nameof(Error), new { message = "Id not provided" });
             }
-            var obj = _studentsService.FindById(id.Value);
+            var obj = await _studentsService.FindByIdAsync(id.Value);
             if (obj == null)
             {
                 return RedirectToAction(nameof(Error), new { message = "Id not found" });
@@ -55,19 +62,19 @@ namespace SchoolManager.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            _studentsService.Remove(id);
+            await _studentsService.RemoveAsync(id);
             return RedirectToAction(nameof(Index));
         }
 
-        public IActionResult Details(int? id)
+        public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
             {
                 return RedirectToAction(nameof(Error), new { message = "Id not provided" });
             }
-            var obj = _studentsService.FindById(id.Value);
+            var obj = await _studentsService.FindByIdAsync(id.Value);
             if (obj == null)
             {
                 return RedirectToAction(nameof(Error), new { message = "Id not found" });
@@ -75,19 +82,19 @@ namespace SchoolManager.Controllers
 
             return View(obj);
         }
-        public IActionResult Edit(int? id)
+        public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
             {
                 return RedirectToAction(nameof(Error), new { message = "Id not provided" });
             }
-            var obj = _studentsService.FindById(id.Value);
+            var obj = await _studentsService.FindByIdAsync(id.Value);
             if (obj == null)
             {
                 return RedirectToAction(nameof(Error), new { message = "Id not found" });
             }
 
-            List<Classroom> classes = _classroomService.FindAll();
+            List<Classroom> classes = await _classroomService.FindAllAsync();
             StudentFormViewModel viewModel = new StudentFormViewModel() { Student = obj, Classrooms = classes };
             return View(viewModel);
 
@@ -95,23 +102,30 @@ namespace SchoolManager.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(int id, Student student)
+        public async Task<IActionResult> Edit(int id, Student student)
         {
+            if (!ModelState.IsValid)
+            {
+                var classes = await _classroomService.FindAllAsync();
+                var viewModel = new StudentFormViewModel { Student = student, Classrooms = classes };
+                return View(viewModel);
+            }
+
             if (id != student.Id)
             {
                 return RedirectToAction(nameof(Error), new { message = "Id mismatch" });
             }
             try
             {
-                _studentsService.Update(student);
+                await _studentsService.UpdateAsync(student);
                 return RedirectToAction(nameof(Index));
             }
             catch (ApplicationException e)
             {
                 return RedirectToAction(nameof(Error), new { message = e.Message });
             }
-            
-            
+
+
         }
 
         public IActionResult Error(string message)

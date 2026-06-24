@@ -20,7 +20,7 @@ public class ClassroomsController : Controller
     }
 
     // GET: CLASSROOMS
-    public async Task<IActionResult> Index()    
+    public async Task<IActionResult> Index()
     {
         return View(await _context.Classrooms.ToListAsync());
     }
@@ -44,36 +44,42 @@ public class ClassroomsController : Controller
     }
 
     // GET: CLASSROOMS/Create
-    public IActionResult Create()
+    public async Task<IActionResult> Create()
     {
-        var teachers = _teacherService.FindAll();
+        var teachers = await _teacherService.FindAllAsync();
         var viewModel = new ClassroomFormViewModel { Teachers = teachers };
         return View(viewModel);
     }
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public IActionResult Create(Classroom classroom)
+    public async Task<IActionResult> Create(Classroom classroom)
     {
-            _classroomService.Insert(classroom);
+        if (!ModelState.IsValid)
+        {
+            var teachers = await _teacherService.FindAllAsync();
+            var viewModel = new ClassroomFormViewModel { Teachers = teachers, Classroom = classroom };
+            return View(viewModel);
+        }
+        await _classroomService.InsertAsync(classroom);
         return RedirectToAction(nameof(Index));
     }
 
     // GET: CLASSROOMS/Edit/5
-    public IActionResult Edit(int? id)
+    public async Task<IActionResult> Edit(int? id)
     {
         if (id == null)
         {
             return RedirectToAction(nameof(Error), new { message = "Id not provided" });
         }
-        var obj = _classroomService.FindById(id.Value);
+        var obj = await _classroomService.FindByIdAsync(id.Value);
         if (obj == null)
         {
             return RedirectToAction(nameof(Error), new { message = "Id not found" });
         }
 
-        List<Teacher> classes = _teacherService.FindAll();
-        ClassroomFormViewModel viewModel = new ClassroomFormViewModel() {Classroom = obj, Teachers = classes};
+        List<Teacher> classes = await _teacherService.FindAllAsync();
+        ClassroomFormViewModel viewModel = new ClassroomFormViewModel() { Classroom = obj, Teachers = classes };
         return View(viewModel);
     }
 
@@ -90,7 +96,7 @@ public class ClassroomsController : Controller
         }
         try
         {
-            _classroomService.Update(classroom);
+            await _classroomService.UpdateAsync(classroom);
             return RedirectToAction(nameof(Index));
         }
         catch (ApplicationException e)
